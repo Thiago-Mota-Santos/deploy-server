@@ -2,6 +2,7 @@ import 'dotenv/config'
 import mongoose from 'mongoose';
 import { ApolloServer } from 'apollo-server-express';
 import http from "http";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { typeDefs } from './typeDefs';
 import { resolvers } from './resolvers';
 import { Movie as MovieModel } from './models/movie';
@@ -27,7 +28,8 @@ const startApolloServer = async(app) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    dataSources
+    dataSources,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start()
  server.applyMiddleware({ app });
