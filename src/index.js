@@ -48,10 +48,12 @@ app.use(router.allowedMethods());
 
  
 
+const server = http.createServer(app.callback());
+	
+	server.listen(3000, () => {
+		// eslint-disable-next-line
+		console.log("server is running");
+	});
 
-
-
-
-app.listen(3000, () => console.log('server running'))
 
 export default app;
