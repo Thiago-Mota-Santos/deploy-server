@@ -29,7 +29,6 @@ const startApolloServer = async(app) => {
     typeDefs,
     resolvers,
     dataSources,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start()
  server.applyMiddleware({ app });
