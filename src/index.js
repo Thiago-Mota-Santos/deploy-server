@@ -8,14 +8,19 @@ import { resolvers } from './resolvers';
 import { Movie as MovieModel } from './models/movie';
 import Movies from './dataSources/movies';
 import express from 'express'
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import cors from 'kcors';
+import { graphqlHTTP } from 'koa-graphql';
+import Router from 'koa-router';
+import logger from 'koa-logger';
 
 const uri = process.env.MONGODB_URI
 const main = async () => {
   await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 };
-const app = express()
-app.use(express.json());
-const httpServer = http.createServer(app);
+const app = new Koa();
+const router = new Router();
 main()
   .then(console.log('🎉 connected to database successfully'))
   .catch(error => console.error(error));
@@ -24,20 +29,29 @@ const dataSources = () => ({
   movies: new Movies(MovieModel),
 });
 
-const startApolloServer = async(app) => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    dataSources,
-  });
-  await server.start()
- server.applyMiddleware({ app });
- 
+const graphQLSettingsPerReq = async (_req, _res, ctx) => {
+
+  return{
+    graphiql: true,
+    pretty: true
+  }
 }
 
-startApolloServer(app, httpServer)
+
+const graphQlServer = graphqlHTTP(graphQLSettingsPerReq);
+router.all('/graphql', graphQlServer);
+
+app.use(cors({ credentials: true }));
+app.use(bodyParser());
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+ 
+
+
+
 
 
 app.listen(3000, () => console.log('server running'))
 
-export default httpServer;
+export default app;
