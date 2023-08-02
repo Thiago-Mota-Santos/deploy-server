@@ -15,6 +15,7 @@ import { graphqlHTTP } from 'koa-graphql';
 import Router from 'koa-router';
 import logger from 'koa-logger';
 import { schema } from './schema/schema';
+import KoaPlayground from 'graphql-playground-middleware-koa';
 
 const uri = process.env.MONGODB_URI
 const main = async () => {
@@ -39,6 +40,7 @@ const graphQLSettingsPerReq = async (_req, _res, ctx) => {
 
 const graphQlServer = graphqlHTTP(graphQLSettingsPerReq);
 router.all('/graphql', graphQlServer);
+router.all('/graphql', KoaPlayground({ endpoint: '/'}) )
 
 app.use(cors({ credentials: true }));
 app.use(bodyParser());
