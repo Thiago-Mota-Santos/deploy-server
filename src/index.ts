@@ -14,6 +14,7 @@ import cors from 'kcors';
 import { graphqlHTTP } from 'koa-graphql';
 import Router from 'koa-router';
 import logger from 'koa-logger';
+import { schema } from './schema/schema';
 
 const uri = process.env.MONGODB_URI
 const main = async () => {
@@ -25,14 +26,12 @@ main()
   .then(console.log('🎉 connected to database successfully'))
   .catch(error => console.error(error));
 
-const dataSources = () => ({
-  movies: new Movies(MovieModel),
-});
 
 const graphQLSettingsPerReq = async (_req, _res, ctx) => {
 
   return{
     graphiql: true,
+    schema,
     pretty: true
   }
 }
