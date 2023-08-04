@@ -1,7 +1,7 @@
 {
-  "name": "graphql_movies",
+  "name": "deploy-server",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "version": "1.0.0",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -9,7 +9,6 @@
     "schema": "tsx scripts/updateSchema.ts",
     "copy-env": "cp .env.example .env",
     "test": "jest --watchAll --detectOpenHandles",
-    "fixture": "tsx src/modules/Appointment/fixture/createAppointment.ts",
     "build": "tsup src"
   },
   "dependencies": {
